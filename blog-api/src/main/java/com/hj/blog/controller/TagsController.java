@@ -1,7 +1,14 @@
 package com.hj.blog.controller;
 
+import com.hj.blog.Service.TagService;
+import com.hj.blog.vo.Result;
+import com.hj.blog.vo.TagVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /*
 接口url：/tags/hot
@@ -26,8 +33,15 @@ import org.springframework.web.bind.annotation.RestController;
 }
 ~~~
  */
+//最热标签接口
 @RestController
-@RequestMapping("/tags/hot")
+@RequestMapping("tags")
 public class TagsController {
+    @Autowired
+    private TagService tagService;
 
+    @GetMapping("/hot")// : /tags/hot
+    public Result listHotTags() {
+        return tagService.hots(5);//此处5是设置的默认前五个最热标签-linmit
+    }
 }

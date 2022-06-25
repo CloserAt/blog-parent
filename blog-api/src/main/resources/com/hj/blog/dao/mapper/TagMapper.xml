@@ -10,4 +10,17 @@
         (select tag_id from hj_article_tag where article_id = #{articleId})
     </select>
 
+    <!--List<Long> findHotTagIds(int i);-->
+    <select id="findHotTagIds" parameterType="int" resultType="java.lang.Long">
+        select tag_id from hj_article_tag group by tag_id order by count(*) desc limit #{limit}
+    </select>
+    <!--List<Tag> findTagsByTagIds(List<Long> tagIds);根据标签id查询标签-->
+    <select id="findTagsByTagIds" parameterType="list" resultType="com.hj.blog.dao.pojo.Tag">
+        select id,tag_name as tagName from hj_tag
+        where id in
+        <foreach collection="tagIds" item="tagId" separator="," open="(" close=")">
+        #{tagId}
+        </foreach>
+    </select>
+
 </mapper>

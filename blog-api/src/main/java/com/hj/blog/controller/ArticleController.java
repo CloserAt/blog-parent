@@ -22,7 +22,97 @@ import org.springframework.web.bind.annotation.*;
 返回数据：
 
 ~~~json
+{
+    "success": true,
+    "code": 200,
+    "msg": "success",
+    "data": [
+        {
+            "id": 1,
+            "title": "springboot介绍以及入门案例",
+            "summary": "通过Spring Boot实现的服务，只需要依靠一个Java类，把它打包成jar，并通过`java -jar`命令就可以运行起来。\r\n\r\n这一切相较于传统Spring应用来说，已经变得非常的轻便、简单。",
+            "commentCounts": 2,
+            "viewCounts": 54,
+            "weight": 1,
+            "createDate": "2609-06-26 15:58",
+            "author": "12",
+            "body": null,
+            "tags": [
+                {
+                    "id": 5,
+                    "avatar": null,
+                    "tagName": "444"
+                },
+                {
+                    "id": 7,
+                    "avatar": null,
+                    "tagName": "22"
+                },
+                {
+                    "id": 8,
+                    "avatar": null,
+                    "tagName": "11"
+                }
+            ],
+            "categorys": null
+        },
+        {
+            "id": 9,
+            "title": "Vue.js 是什么",
+            "summary": "Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的渐进式框架。",
+            "commentCounts": 0,
+            "viewCounts": 3,
+            "weight": 0,
+            "createDate": "2609-06-27 11:25",
+            "author": "12",
+            "body": null,
+            "tags": [
+                {
+                    "id": 7,
+                    "avatar": null,
+                    "tagName": "22"
+                }
+            ],
+            "categorys": null
+        },
+        {
+            "id": 10,
+            "title": "Element相关",
+            "summary": "本节将介绍如何在项目中使用 Element。",
+            "commentCounts": 0,
+            "viewCounts": 3,
+            "weight": 0,
+            "createDate": "2609-06-27 11:25",
+            "author": "12",
+            "body": null,
+            "tags": [
+                {
+                    "id": 5,
+                    "avatar": null,
+                    "tagName": "444"
+                },
+                {
+                    "id": 6,
+                    "avatar": null,
+                    "tagName": "33"
+                },
+                {
+                    "id": 7,
+                    "avatar": null,
+                    "tagName": "22"
+                },
+                {
+                    "id": 8,
+                    "avatar": null,
+                    "tagName": "11"
+                }
+            ],
+            "categorys": null
+        }
+    ]
+}
  */
+//首页文章接口
 @RestController//json数据进行交互
 @RequestMapping("articles")//请求网址: http://localhost:8888/articles 路径请求是articles,所以注解中的括号填写articles
 public class ArticleController {
