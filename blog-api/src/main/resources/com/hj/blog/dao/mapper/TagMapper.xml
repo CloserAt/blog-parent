@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--MyBatis配置文件-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hj.blog.dao.mapper.TagMapper">
+    <!--List<Tag> findTagsByArticleId(Long articleId); 一一对应-->
+    <select id="findTagsByArticleId" parameterType="Long" resultType="com.hj.blog.dao.pojo.Tag">
+        select id,avatar,tag_name as tagName from hj_tag
+        where id in
+        (select tag_id from hj_article_tag where article_id = #{articleId})
+    </select>
+
+</mapper>
