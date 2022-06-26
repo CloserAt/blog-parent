@@ -112,7 +112,7 @@ import org.springframework.web.bind.annotation.*;
     ]
 }
  */
-//首页文章接口
+
 @RestController//json数据进行交互
 @RequestMapping("articles")//请求网址: http://localhost:8888/articles 路径请求是articles,所以注解中的括号填写articles
 public class ArticleController {
@@ -120,6 +120,7 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    //首页文章接口
     /*
     首页 文章列表
     依据开发日志，返回值是：
@@ -133,5 +134,130 @@ public class ArticleController {
     public Result listArticle(@RequestBody PageParams pageParams) {
         //pageParams需要查询的数据
         return articleService.listArticle(pageParams);
+    }
+
+    //最热文章-接口
+    /*
+    接口url：/articles/hot
+
+    请求方式：POST
+
+    请求参数：
+
+    | 参数名称 | 参数类型 | 说明 |
+    | -------- | -------- | ---- |
+    |          |          |      |
+    |          |          |      |
+    |          |          |      |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": [
+            {
+                "id": 1,
+                "title": "springboot介绍以及入门案例",
+            },
+            {
+                "id": 9,
+                "title": "Vue.js 是什么",
+            },
+            {
+                "id": 10,
+                "title": "Element相关",
+            }
+        ]
+    }
+     */
+    @PostMapping("/hot")
+    public Result listHotArticle() {
+        return articleService.listHotArticle(5);
+    }
+
+
+    //最新文章-接口
+    /*
+    接口url：/articles/new
+
+    请求方式：POST
+
+    请求参数：
+
+    | 参数名称 | 参数类型 | 说明 |
+    | -------- | -------- | ---- |
+    |          |          |      |
+    |          |          |      |
+    |          |          |      |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": [
+            {
+                "id": 1,
+                "title": "springboot介绍以及入门案例",
+            },
+            {
+                "id": 9,
+                "title": "Vue.js 是什么",
+            },
+            {
+                "id": 10,
+                "title": "Element相关",
+
+            }
+        ]
+    }
+    ~~~
+     */
+    @PostMapping("/new")
+    public Result listNewArticle() {
+        return articleService.listNewArticle(5);
+    }
+
+
+    //文章归档-接口
+    /*
+    接口url：/articles/listArchives
+
+    请求方式：POST
+
+    请求参数：
+
+    | 参数名称 | 参数类型 | 说明 |
+    | -------- | -------- | ---- |
+    |          |          |      |
+    |          |          |      |
+    |          |          |      |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": [
+            {
+                "year": "2021",
+                "month": "6",
+                "count": 2
+            }
+
+        ]
+    }
+    ~~~
+     */
+    @PostMapping("/listArchives")
+    public Result listArchives() {
+        return articleService.listArchives();
     }
 }

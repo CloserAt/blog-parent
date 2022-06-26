@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.blog.Service.ArticleService;
 import com.hj.blog.Service.SysUserService;
 import com.hj.blog.Service.TagService;
+import com.hj.blog.dao.dos.Archives;
 import com.hj.blog.dao.mapper.ArticleMapper;
 import com.hj.blog.dao.pojo.Article;
 import com.hj.blog.dao.pojo.SysUser;
@@ -73,5 +74,39 @@ public class ArticleServiceImpl implements ArticleService {
             articleVo.setTags(tagService.findTagsByArticleId(articleId));
         }
         return articleVo;
+    }
+
+
+    //最热文章接口实现
+    @Override
+    public Result listHotArticle(int limit) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getViewCounts);//根据浏览量倒叙排序
+        queryWrapper.select(Article::getId,Article::getTitle);//根据接口说明只需要id，title这两个数据，因此此处需要选择以下
+        queryWrapper.last("limit " + limit);//限制数量等价于 select id,title from article order by view_counts desc limit 5
+
+        List<Article> articleList = articleMapper.selectList(queryWrapper);//将排完序的结果放入集合
+        return Result.success(copyList(articleList,false,false));
+    }
+
+
+    //最新文章接口实现
+    @Override
+    public Result listNewArticle(int limit) {
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getCreateData);//根据创建时间倒叙排序
+        queryWrapper.select(Article::getId,Article::getTitle);
+        queryWrapper.last("limit " + limit);
+
+        List<Article> articleList = articleMapper.selectList(queryWrapper);
+        return Result.success(copyList(articleList,false,false));
+    }
+
+
+    //文章归档接口实现
+    @Override
+    public Result listArchives() {
+        List<Archives> archivesList = articleMapper.listArchives();
+        return Result.success(archivesList);
     }
 }

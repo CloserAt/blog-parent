@@ -1,7 +1,9 @@
 package com.hj.blog.config;
 
+import com.hj.blog.handler.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -13,4 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //本地测试 端口不一致也算跨域
         registry.addMapping("/**").allowedOrigins("http://localhost:8080");//允许8080端口访问所有端口
     }
+
+
+
 }

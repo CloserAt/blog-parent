@@ -7,4 +7,10 @@ import org.springframework.stereotype.Service;
 
 public interface ArticleService {
     Result listArticle(PageParams pageParams);
+
+    Result listHotArticle(int limit);
+
+    Result listNewArticle(int limit);
+
+    Result listArchives();
 }
