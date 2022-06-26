@@ -3,14 +3,18 @@ package com.hj.blog.Service.serviceImpl;
 import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.hj.blog.Service.ArticleService;
-import com.hj.blog.Service.SysUserService;
-import com.hj.blog.Service.TagService;
+import com.hj.blog.Service.*;
 import com.hj.blog.dao.dos.Archives;
+import com.hj.blog.dao.mapper.ArticleBodyMapper;
 import com.hj.blog.dao.mapper.ArticleMapper;
+import com.hj.blog.dao.mapper.CategoryMapper;
 import com.hj.blog.dao.pojo.Article;
+import com.hj.blog.dao.pojo.ArticleBody;
+import com.hj.blog.dao.pojo.Category;
 import com.hj.blog.dao.pojo.SysUser;
+import com.hj.blog.vo.ArticleBodyVo;
 import com.hj.blog.vo.ArticleVo;
+import com.hj.blog.vo.CategoryVo;
 import com.hj.blog.vo.Result;
 import com.hj.blog.vo.params.PageParams;
 import org.joda.time.DateTime;
@@ -54,12 +58,24 @@ public class ArticleServiceImpl implements ArticleService {
     private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTags) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         for (int i = 0; i < records.size(); i++) {
-            articleVoList.add(copy(records.get(i),true,true));
+            articleVoList.add(copy(records.get(i),isAuthor,isTags,true,true));
+        }
+        return  articleVoList;
+    }
+    //重载的方式
+    private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTags, boolean isBody, boolean isCategory) {
+        List<ArticleVo> articleVoList = new ArrayList<>();
+        for (int i = 0; i < records.size(); i++) {
+            articleVoList.add(copy(records.get(i),isAuthor,isTags,isBody,isCategory));
         }
         return  articleVoList;
     }
 
-    private ArticleVo copy(Article article, boolean isAuthor, boolean isTags) {
+
+    @Autowired
+    private CategoryService categoryService;
+
+    private ArticleVo copy(Article article, boolean isAuthor, boolean isTags, boolean isBody, boolean isCategory) {
         ArticleVo articleVo = new ArticleVo();
         BeanUtils.copyProperties(article,articleVo);//spring提供的copy方法，将article的数据拷贝到articleVo中
         //因为article中的createDate是Long型，而articleVo中的是String类型，所以此处需要转一下类型，不然copy不过来
@@ -73,7 +89,26 @@ public class ArticleServiceImpl implements ArticleService {
             Long articleId = article.getId();
             articleVo.setTags(tagService.findTagsByArticleId(articleId));
         }
+        if (isBody) {
+            Long bodyId = article.getBodyId();
+            articleVo.setBody(findArticleBodyByBodyId(bodyId));
+        }
+        if (isCategory) {
+            Long categoryId = article.getCategoryId();
+            articleVo.setCategory(categoryService.findCategoryByCategoryId(categoryId));
+        }
         return articleVo;
+    }
+
+    @Autowired
+    private ArticleBodyMapper articleBodyMapper;
+
+
+    private ArticleBodyVo findArticleBodyByBodyId(Long bodyId) {
+        ArticleBody articleBody = articleBodyMapper.selectById(bodyId);
+        ArticleBodyVo articleBodyVo = new ArticleBodyVo();
+        articleBodyVo.setContent(articleBody.getContent());
+        return articleBodyVo;
     }
 
 
@@ -108,5 +143,26 @@ public class ArticleServiceImpl implements ArticleService {
     public Result listArchives() {
         List<Archives> archivesList = articleMapper.listArchives();
         return Result.success(archivesList);
+    }
+
+
+    @Autowired
+    private ThreadService threadService;
+
+    //文章详情接口实现
+    @Override
+    public Result findArticleById(Long articleId) {
+        /*
+          1.根据id查询 文章信息
+          2.根据bodyId和categoryId关联查询
+         */
+        Article article = this.articleMapper.selectById(articleId);//根据文章id找到文章
+        ArticleVo articleVo = copy(article, true, true,true,true);//再将article转换为articleVo
+        //如果在此处加上一个查看玩文章后更新阅读数的功能的话，是不太建议的
+        //因为在查看玩文章之后，本应该直接返回数据了，此时做了一个更新操作，更新世在数据库会加写锁，阻塞其他的读操作，会降低性能
+        //更新也会增加此次接口的耗时，且一旦更新出了问题，不能影响查看文章的操作
+        //所以可以采用 线程池 中放入更新操作，就和主线程不相关了
+        threadService.updateArticleViewCount(articleMapper,article);
+        return Result.success(articleVo);
     }
 }

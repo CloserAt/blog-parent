@@ -1,6 +1,7 @@
 package com.hj.blog.controller;
 
 import com.hj.blog.Service.ArticleService;
+import com.hj.blog.vo.ArticleVo;
 import com.hj.blog.vo.Result;
 import com.hj.blog.vo.params.PageParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,5 +260,36 @@ public class ArticleController {
     @PostMapping("/listArchives")
     public Result listArchives() {
         return articleService.listArchives();
+    }
+
+
+    //文章详情接口
+    /*
+    接口url：/article/view/{id}
+
+    请求方式：POST
+
+    请求参数：
+
+    | 参数名称 | 参数类型 | 说明               |
+    | -------- | -------- | ------------------ |
+    | id       | long     | 文章id（路径参数） |
+    |          |          |                    |
+    |          |          |                    |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": "token"
+    }
+    ~~~
+     */
+    @PostMapping("view/{id}")
+    public Result articleBody(@PathVariable("id") Long articleId) {
+        return articleService.findArticleById(articleId);
     }
 }

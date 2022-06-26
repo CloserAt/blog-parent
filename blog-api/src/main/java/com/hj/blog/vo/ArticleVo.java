@@ -1,5 +1,7 @@
 package com.hj.blog.vo;
 
+import com.hj.blog.dao.pojo.ArticleBody;
+import com.hj.blog.dao.pojo.Category;
 import com.hj.blog.dao.pojo.Tag;
 import lombok.Data;
 
@@ -11,11 +13,14 @@ public class ArticleVo {
     private Long id;
     private String title;
     private String summary;
-    private int commentCounts;
-    private int viewCounts;
-    private int weight;
+    private Integer commentCounts;
+    private Integer viewCounts;
+    private Integer weight;
     private String crateDate;
     private String author = "adia";
 
     private List<TagVo> tags;
+
+    private ArticleBodyVo body;
+    private CategoryVo category;
 }

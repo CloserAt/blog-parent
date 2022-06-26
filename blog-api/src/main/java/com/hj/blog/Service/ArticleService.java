@@ -1,5 +1,6 @@
 package com.hj.blog.Service;
 
+import com.hj.blog.vo.ArticleVo;
 import com.hj.blog.vo.Result;
 import com.hj.blog.vo.params.PageParams;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,6 @@ public interface ArticleService {
     Result listNewArticle(int limit);
 
     Result listArchives();
+
+    Result findArticleById(Long articleId);
 }
