@@ -9,4 +9,7 @@ public interface TagService {
     List<TagVo> findTagsByArticleId(Long articleId);//根据文章id查询标签列表
 
     Result hots(int i);
+
+    Result findAllTags();
+
 }

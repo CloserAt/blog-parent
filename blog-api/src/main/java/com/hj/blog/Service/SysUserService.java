@@ -2,6 +2,7 @@ package com.hj.blog.Service;
 
 import com.hj.blog.dao.pojo.SysUser;
 import com.hj.blog.vo.Result;
+import com.hj.blog.vo.UserVo;
 
 public interface SysUserService {
     SysUser findAuthorsByAuthorId(Long authorId);
@@ -14,4 +15,5 @@ public interface SysUserService {
 
     void save(SysUser newSysUser);
 
+    UserVo findUserVoById(Long authorId);
 }

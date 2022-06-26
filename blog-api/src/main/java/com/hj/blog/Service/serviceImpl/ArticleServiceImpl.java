@@ -7,15 +7,12 @@ import com.hj.blog.Service.*;
 import com.hj.blog.dao.dos.Archives;
 import com.hj.blog.dao.mapper.ArticleBodyMapper;
 import com.hj.blog.dao.mapper.ArticleMapper;
+import com.hj.blog.dao.mapper.ArticleTagMapper;
 import com.hj.blog.dao.mapper.CategoryMapper;
-import com.hj.blog.dao.pojo.Article;
-import com.hj.blog.dao.pojo.ArticleBody;
-import com.hj.blog.dao.pojo.Category;
-import com.hj.blog.dao.pojo.SysUser;
-import com.hj.blog.vo.ArticleBodyVo;
-import com.hj.blog.vo.ArticleVo;
-import com.hj.blog.vo.CategoryVo;
-import com.hj.blog.vo.Result;
+import com.hj.blog.dao.pojo.*;
+import com.hj.blog.utils.UserThreadLocal;
+import com.hj.blog.vo.*;
+import com.hj.blog.vo.params.ArticleParams;
 import com.hj.blog.vo.params.PageParams;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -164,5 +163,58 @@ public class ArticleServiceImpl implements ArticleService {
         //所以可以采用 线程池 中放入更新操作，就和主线程不相关了
         threadService.updateArticleViewCount(articleMapper,article);
         return Result.success(articleVo);
+    }
+
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
+
+    @Override
+    public Result articlePublish(ArticleParams articleParams) {
+
+        /*
+        1.构建Article对象
+        2.获取作者信息的id
+        3.将标签加入到关联列表中
+        4.body内容存储
+        */
+        SysUser sysUser = UserThreadLocal.get();//获取作者信息
+
+        Article article = new Article();
+        article.setTitle(articleParams.getTitle());
+        article.setCategoryId(articleParams.getCategory().getId());
+        article.setSummary(articleParams.getSummary());
+        article.setCreateData(System.currentTimeMillis());
+        article.setAuthorId(sysUser.getId());//从作者信息中获取作者id来设置
+        article.setWeight(Article.Article_Common);
+        article.setBodyId(-1L);
+        article.setViewCounts(0);
+        article.setCommentCounts(0);
+        this.articleMapper.insert(article);//插入之后会生成一个文章id
+
+        //将标签加入到关联列表中
+        List<TagVo> tags = articleParams.getTags();
+        if (tags != null) {
+            for (TagVo tag : tags) {
+                Long articleId = article.getId();
+                ArticleTag articleTag = new ArticleTag();
+                articleTag.setTagId(tag.getId());
+                articleTag.setArticleId(articleId);
+                articleTagMapper.insert(articleTag);
+            }
+        }
+
+        //body内容存储
+        ArticleBody articleBody = new ArticleBody();
+        articleBody.setArticleId(article.getId());
+        articleBody.setContent(articleParams.getBody().getContent());
+        articleBody.setContentHtml(articleParams.getBody().getContentHtml());
+        articleBodyMapper.insert(articleBody);
+        articleBody.setId(articleBody.getId());
+
+        articleMapper.updateById(article);//更新
+
+        Map<String,String> map = new HashMap<>();//接口说明中返回的是{"id":12232323}
+        map.put("id", article.getId().toString());//此处转为String也是防止精度损失
+        return Result.success(map);
     }
 }

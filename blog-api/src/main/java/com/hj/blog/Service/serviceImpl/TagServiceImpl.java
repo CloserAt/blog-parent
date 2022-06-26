@@ -1,5 +1,6 @@
 package com.hj.blog.Service.serviceImpl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hj.blog.Service.TagService;
 import com.hj.blog.dao.mapper.TagMapper;
 import com.hj.blog.dao.pojo.Tag;
@@ -58,5 +59,14 @@ public class TagServiceImpl implements TagService {
         //业务需要的是tagId和tagName的Tag对象
         List<Tag> tagList = tagMapper.findTagsByTagIds(tagIds);
         return Result.success(tagList);
+    }
+
+
+    //所有标签接口实现
+    @Override
+    public Result findAllTags() {
+        List<Tag> tags = this.tagMapper.selectList(new LambdaQueryWrapper<>());
+
+        return Result.success(copyList(tags));
     }
 }

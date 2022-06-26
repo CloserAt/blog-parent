@@ -4,7 +4,7 @@
 <mapper namespace="com.hj.blog.dao.mapper.ArticleMapper">
     <!--List<Archives> listArchives();-->
     <select id="listArchives"  resultType="com.hj.blog.dao.dos.Archives">
-        select year(create_date) as year,month(create_date) as month,count(*) as count
+        select FROM_UNIXTIME(create_date/1000,'%Y') as year, FROM_UNIXTIME(create_date/1000,'%m') as month,count(*) as count
         from hj_article
         group by year,month
     </select>

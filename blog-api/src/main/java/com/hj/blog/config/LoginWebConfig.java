@@ -14,6 +14,8 @@ public class LoginWebConfig extends WebMvcConfig {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/test");
+                .addPathPatterns("/test")
+                .addPathPatterns("/comments/create/change")//此处添加评论拦截路径是因为只有用户登陆之后才可以进行评论
+                .addPathPatterns("/articles/publish");
     }
 }

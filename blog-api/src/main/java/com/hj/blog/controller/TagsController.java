@@ -44,4 +44,51 @@ public class TagsController {
     public Result listHotTags() {
         return tagService.hots(5);//此处5是设置的默认前五个最热标签-linmit
     }
+
+    //所有标签接口
+    /*
+    接口url：/tags
+
+    请求方式：GET
+
+    请求参数：
+
+    | 参数名称 | 参数类型 | 说明 |
+    | -------- | -------- | ---- |
+    |          |          |      |
+    |          |          |      |
+    |          |          |      |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": [
+            {
+                "id": 5,
+                "tagName": "springboot"
+            },
+            {
+                "id": 6,
+                "tagName": "spring"
+            },
+            {
+                "id": 7,
+                "tagName": "springmvc"
+            },
+            {
+                "id": 8,
+                "tagName": "11"
+            }
+        ]
+    }
+    ~~~
+     */
+    @GetMapping
+    public Result tagsAll() {
+        return tagService.findAllTags();
+    }
 }

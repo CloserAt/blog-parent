@@ -10,7 +10,9 @@ import com.hj.blog.utils.JWTUtils;
 import com.hj.blog.vo.ErrorCode;
 import com.hj.blog.vo.LoginUserVo;
 import com.hj.blog.vo.Result;
+import com.hj.blog.vo.UserVo;
 import io.netty.util.internal.StringUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -92,5 +94,18 @@ public class SysUserServiceImpl implements SysUserService {
         //保存用户这里 id会自动生成
         //此处默认生成的id是分布式id，雪花算法 mybatisPlus
         this.sysUserMapper.insert(newSysUser);
+    }
+
+    @Override
+    public UserVo findUserVoById(Long authorId) {
+        SysUser sysUser = sysUserMapper.selectById(authorId);
+        if (sysUser == null) {
+            sysUser = new SysUser();
+
+            sysUser.setNickname("佚名");
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(sysUser,userVo);
+        return userVo;
     }
 }

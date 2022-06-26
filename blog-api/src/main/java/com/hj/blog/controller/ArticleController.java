@@ -1,8 +1,10 @@
 package com.hj.blog.controller;
 
 import com.hj.blog.Service.ArticleService;
+import com.hj.blog.common.aop.LogAnnotation;
 import com.hj.blog.vo.ArticleVo;
 import com.hj.blog.vo.Result;
+import com.hj.blog.vo.params.ArticleParams;
 import com.hj.blog.vo.params.PageParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -131,6 +133,7 @@ public class ArticleController {
         "data": [
      */
     @PostMapping("/articles")
+    @LogAnnotation(module = "文章",operator = "获取文章列表")
     //返回值Result来自service层的方法所查询到的数据
     public Result listArticle(@RequestBody PageParams pageParams) {
         //pageParams需要查询的数据
@@ -291,5 +294,40 @@ public class ArticleController {
     @PostMapping("view/{id}")
     public Result articleBody(@PathVariable("id") Long articleId) {
         return articleService.findArticleById(articleId);
+    }
+
+
+    //文章发布接口
+    /*
+    接口url：/articles/publish
+
+    请求方式：POST
+
+    请求参数：
+
+    | 参数名称 | 参数类型                                                    | 说明               |
+    | -------- | ----------------------------------------------------------- | ------------------ |
+    | title    | string                                                      | 文章标题           |
+    | id       | long                                                        | 文章id（编辑有值） |
+    | body     | object（{content: "ww", contentHtml: "<p>ww</p>↵"}）        | 文章内容           |
+    | category | {id: 2, avatar: "/category/back.png", categoryName: "后端"} | 文章类别           |
+    | summary  | string                                                      | 文章概述           |
+    | tags     | [{id: 5}, {id: 6}]                                          | 文章标签           |
+
+    返回数据：
+
+    ~~~json
+    {
+        "success": true,
+        "code": 200,
+        "msg": "success",
+        "data": {"id":12232323}
+    }
+    ~~~
+     */
+    //注意此接口也需要加入到拦截路径中
+    @PostMapping("/publish")
+    public Result articlePublish(@RequestBody ArticleParams articleParams) {
+        return articleService.articlePublish(articleParams);
     }
 }

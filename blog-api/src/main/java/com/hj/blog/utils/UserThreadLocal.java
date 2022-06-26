@@ -12,8 +12,8 @@ public class UserThreadLocal {
         LOCAL.set(sysUser);
     }
 
-    public static void get() {
-        LOCAL.get();
+    public static SysUser get() {
+        return LOCAL.get();
     }
 
     public static void remove() {
