@@ -1,10 +1,10 @@
 package com.hj.blog.Service;
 
 
-import com.hj.blog.dao.pojo.SysUser;
-import com.hj.blog.vo.Result;
-import com.hj.blog.vo.params.LoginParams;
-import com.hj.blog.vo.params.RegisterParams;
+import com.hj.blog.admin.pojo.SysUser;
+import com.hj.blog.admin.vo.Result;
+import com.hj.blog.admin.vo.params.LoginParams;
+import com.hj.blog.admin.vo.params.RegisterParams;
 
 public interface LoginService {
     Result login(LoginParams loginParams);

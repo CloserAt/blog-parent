@@ -1,6 +1,6 @@
 package com.hj.blog.utils;
 
-import com.hj.blog.dao.pojo.SysUser;
+import com.hj.blog.admin.pojo.SysUser;
 
 public class UserThreadLocal {
     private UserThreadLocal(){};

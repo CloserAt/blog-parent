@@ -1,6 +1,6 @@
 package com.hj.blog.handler;
 
-import com.hj.blog.vo.Result;
+import com.hj.blog.admin.vo.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

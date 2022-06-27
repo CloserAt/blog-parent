@@ -2,21 +2,18 @@ package com.hj.blog.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.hj.blog.Service.TokenService;
-import com.hj.blog.dao.pojo.SysUser;
+import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.utils.UserThreadLocal;
-import com.hj.blog.vo.ErrorCode;
-import com.hj.blog.vo.Result;
+import com.hj.blog.admin.vo.ErrorCode;
+import com.hj.blog.admin.vo.Result;
 import com.mysql.cj.util.StringUtils;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Component

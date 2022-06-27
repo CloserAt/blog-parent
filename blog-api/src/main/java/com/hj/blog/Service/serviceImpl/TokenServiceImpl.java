@@ -2,7 +2,7 @@ package com.hj.blog.Service.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.hj.blog.Service.TokenService;
-import com.hj.blog.dao.pojo.SysUser;
+import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.utils.JWTUtils;
 import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

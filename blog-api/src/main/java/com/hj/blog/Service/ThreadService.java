@@ -1,8 +1,8 @@
 package com.hj.blog.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hj.blog.dao.mapper.ArticleMapper;
-import com.hj.blog.dao.pojo.Article;
+import com.hj.blog.admin.mapper.ArticleMapper;
+import com.hj.blog.admin.pojo.Article;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 

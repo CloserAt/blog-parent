@@ -1,10 +1,9 @@
 package com.hj.blog.Service;
 
-import com.hj.blog.vo.ArticleVo;
-import com.hj.blog.vo.Result;
-import com.hj.blog.vo.params.ArticleParams;
-import com.hj.blog.vo.params.PageParams;
-import org.springframework.stereotype.Service;
+import com.hj.blog.admin.vo.ArticleVo;
+import com.hj.blog.admin.vo.Result;
+import com.hj.blog.admin.vo.params.ArticleParams;
+import com.hj.blog.admin.vo.params.PageParams;
 
 
 public interface ArticleService {

@@ -1,7 +1,7 @@
 package com.hj.blog.Service;
 
-import com.hj.blog.vo.Result;
-import com.hj.blog.vo.TagVo;
+import com.hj.blog.admin.vo.Result;
+import com.hj.blog.admin.vo.TagVo;
 
 import java.util.List;
 

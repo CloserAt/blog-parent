@@ -2,12 +2,11 @@ package com.hj.blog.Service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hj.blog.Service.CategoryService;
-import com.hj.blog.dao.mapper.CategoryMapper;
-import com.hj.blog.dao.pojo.Category;
-import com.hj.blog.dao.pojo.Comment;
-import com.hj.blog.vo.CategoryVo;
-import com.hj.blog.vo.CommentVo;
-import com.hj.blog.vo.Result;
+import com.hj.blog.admin.mapper.CategoryMapper;
+import com.hj.blog.admin.pojo.Category;
+import com.hj.blog.admin.pojo.Comment;
+import com.hj.blog.admin.vo.CategoryVo;
+import com.hj.blog.admin.vo.Result;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
