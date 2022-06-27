@@ -50,4 +50,20 @@ public class CategoryServiceImpl implements CategoryService {
         BeanUtils.copyProperties(category,categoryVo);
         return categoryVo;
     }
+
+
+    //导航-文章分类接口实现
+    @Override
+    public Result findAllCategoriesDetail() {
+        List<Category> categories = categoryMapper.selectList(new LambdaQueryWrapper<>());
+        return Result.success(categories);
+    }
+
+
+    //文章分类列表根据id查看分类
+    @Override
+    public Result findCategoriesDetailById(Long id) {
+        Category category = categoryMapper.selectById(id);
+        return Result.success(copy(category));
+    }
 }

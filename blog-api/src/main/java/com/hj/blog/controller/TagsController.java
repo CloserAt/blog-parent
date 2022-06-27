@@ -5,6 +5,7 @@ import com.hj.blog.vo.Result;
 import com.hj.blog.vo.TagVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -90,5 +91,21 @@ public class TagsController {
     @GetMapping
     public Result tagsAll() {
         return tagService.findAllTags();
+    }
+
+
+
+    //查看所有标签接口
+    @GetMapping("/detail")
+    public Result findAllTagsDetail() {
+        return tagService.findAllTagsDetail();
+    }
+
+
+
+    //标签文章列表接口
+    @GetMapping("/detail/{id}")
+    public Result findTagsDetailById(@PathVariable("id") Long id) {
+        return tagService.findTagsDetailById(id);
     }
 }

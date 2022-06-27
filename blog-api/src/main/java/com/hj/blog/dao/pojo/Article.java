@@ -9,7 +9,7 @@ public class Article {
     public static final int Article_TOP = 1;
     private Long id;
     private Integer commentCounts;
-    private Long createData;
+    private Long createDate;
     private String summary;
     private String title;
     private Integer viewCounts;

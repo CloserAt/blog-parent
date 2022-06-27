@@ -65,8 +65,26 @@ public class TagServiceImpl implements TagService {
     //所有标签接口实现
     @Override
     public Result findAllTags() {
-        List<Tag> tags = this.tagMapper.selectList(new LambdaQueryWrapper<>());
-
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(Tag::getId);
+        queryWrapper.select(Tag::getTagName);
+        List<Tag> tags = this.tagMapper.selectList(queryWrapper);
         return Result.success(copyList(tags));
+    }
+
+
+    //查看所有详细标签接口实现
+    @Override
+    public Result findAllTagsDetail() {
+        List<Tag> tags = tagMapper.selectList(new LambdaQueryWrapper<>());
+        return Result.success(tags);
+    }
+
+
+    //标签文章列表根据id查标签接口实现
+    @Override
+    public Result findTagsDetailById(Long id) {
+        Tag tag = tagMapper.selectById(id);
+        return Result.success(copy(tag));
     }
 }

@@ -9,6 +9,7 @@ public enum  ErrorCode {
     ACCOUNT_PWD_EXIST(10004,"用户名已存在"),
     NO_PERMISSION(70001,"无访问权限"),
     SESSION_TIME_OUT(90001,"会话超时"),
+    UPLOAD_FAIL(20001,"上传失败"),
     NO_LOGIN(90002,"未登录"),;
 
     private int code;

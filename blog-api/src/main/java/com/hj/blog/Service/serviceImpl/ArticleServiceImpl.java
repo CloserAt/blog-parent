@@ -2,6 +2,7 @@ package com.hj.blog.Service.serviceImpl;
 
 import com.alibaba.fastjson.support.odps.udf.CodecCheck;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hj.blog.Service.*;
 import com.hj.blog.dao.dos.Archives;
@@ -35,24 +36,60 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private SysUserService sysUserService;
 
+
     @Override
     public Result listArticle(PageParams pageParams) {
-        /*
-        分页查询article数据库表
-         */
         int pageNumber = pageParams.getPage();
         int pageSize = pageParams.getPageSize();
         Page<Article> page = new Page<>(pageNumber,pageSize);
-
-        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Article::getWeight);//按照是否置顶排序
-        queryWrapper.orderByDesc(Article::getCreateData);//按照创建时间倒叙排列
-
-        Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);//第一个参数为查询的页，第二个为查询条件
-        List<Article> records = articlePage.getRecords();
-        List<ArticleVo>  articleVoList = copyList(records,true,true);
-        return Result.success(articleVoList);
+        IPage<Article> articleIPage = articleMapper.listArticle(
+                page,
+                pageParams.getCategoryId(),
+                pageParams.getTagId(),
+                pageParams.getYear(),
+                pageParams.getMonth());
+        List<Article> records = articleIPage.getRecords();
+        return Result.success(copyList(records,true,true));
     }
+
+//    @Override
+//    public Result listArticle(PageParams pageParams) {
+//        /*
+//        分页查询article数据库表
+//         */
+//        int pageNumber = pageParams.getPage();
+//        int pageSize = pageParams.getPageSize();
+//        Page<Article> page = new Page<>(pageNumber,pageSize);
+//
+//        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+//        if (pageParams.getCategoryId() != null) {
+//            //and category_id=#{categoryId}
+//            queryWrapper.eq(Article::getCategoryId, pageParams.getCategoryId());
+//        }
+//        List<Long> articleIdList = new ArrayList<>();
+//        if (pageParams.getTagId() != null) {
+//            //加入标签 条件查询
+//            //article表中没有tag字段 一篇文章 有多个标签
+//            //article_tag article_id 1:n tag_id的对应关系
+//            LambdaQueryWrapper<ArticleTag> articleTagLambdaQueryWrapper = new LambdaQueryWrapper<>();
+//            articleTagLambdaQueryWrapper.eq(ArticleTag::getTagId, pageParams.getTagId());
+//            List<ArticleTag> articleTags = articleTagMapper.selectList(articleTagLambdaQueryWrapper);
+//            for (ArticleTag articleTag : articleTags) {
+//                articleIdList.add(articleTag.getId());
+//            }
+//            if (articleIdList.size() > 0) {
+//                queryWrapper.in(Article::getId, articleIdList);
+//            }
+//        }
+//
+//        queryWrapper.orderByDesc(Article::getWeight);//按照是否置顶排序
+//        queryWrapper.orderByDesc(Article::getCreateData);//按照创建时间倒叙排列
+//
+//        Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);//第一个参数为查询的页，第二个为查询条件
+//        List<Article> records = articlePage.getRecords();
+//        List<ArticleVo>  articleVoList = copyList(records,true,true);
+//        return Result.success(articleVoList);
+//    }
 
     private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTags) {
         List<ArticleVo> articleVoList = new ArrayList<>();
@@ -78,7 +115,7 @@ public class ArticleServiceImpl implements ArticleService {
         ArticleVo articleVo = new ArticleVo();
         BeanUtils.copyProperties(article,articleVo);//spring提供的copy方法，将article的数据拷贝到articleVo中
         //因为article中的createDate是Long型，而articleVo中的是String类型，所以此处需要转一下类型，不然copy不过来
-        articleVo.setCrateDate(new DateTime(article.getCreateData()).toString("yyyy-MM-dd HH:mm"));
+        articleVo.setCrateDate(new DateTime(article.getCreateDate()).toString("yyyy-MM-dd HH:mm"));
         //并不是所有接口都需要标签和作者的信息，此处需要两个处理
         if (isAuthor) {
             Long authorId = article.getAuthorId();
@@ -128,7 +165,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Result listNewArticle(int limit) {
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Article::getCreateData);//根据创建时间倒叙排序
+        queryWrapper.orderByDesc(Article::getCreateDate);//根据创建时间倒叙排序
         queryWrapper.select(Article::getId,Article::getTitle);
         queryWrapper.last("limit " + limit);
 
@@ -183,7 +220,7 @@ public class ArticleServiceImpl implements ArticleService {
         article.setTitle(articleParams.getTitle());
         article.setCategoryId(articleParams.getCategory().getId());
         article.setSummary(articleParams.getSummary());
-        article.setCreateData(System.currentTimeMillis());
+        article.setCreateDate(System.currentTimeMillis());
         article.setAuthorId(sysUser.getId());//从作者信息中获取作者id来设置
         article.setWeight(Article.Article_Common);
         article.setBodyId(-1L);

@@ -12,6 +12,13 @@ spring:
   redis:
     host: localhost
     port: 6379
+  servlet:
+    multipart:
+      # 上传文件总的最大值
+      max-request-size: 20MB
+
+      # 单个文件的最大值
+      max-file-size: 2MB
 
 mybatis-plus:
   configuration:
@@ -24,4 +31,3 @@ mybatis-plus:
   global-config:
     db-config:
       table-prefix: hj_
-

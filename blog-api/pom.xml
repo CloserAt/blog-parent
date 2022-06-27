@@ -132,5 +132,11 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
+        <!--上传图片功能的依赖-->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

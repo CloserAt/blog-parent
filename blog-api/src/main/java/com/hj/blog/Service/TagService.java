@@ -12,4 +12,8 @@ public interface TagService {
 
     Result findAllTags();
 
+    Result findAllTagsDetail();
+
+    Result findTagsDetailById(Long id);
+
 }
