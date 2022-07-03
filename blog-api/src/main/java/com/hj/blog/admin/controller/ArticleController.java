@@ -237,7 +237,7 @@ public class ArticleController {
     @PostMapping("search")
     public Result search(@RequestBody ArticleParams articleParams){
         //写一个搜索接口
-        String search = articleParams.getSearch();
-        return articleService.searchArticle(search);
+        //String search = articleParams.getSearch();
+        return articleService.searchArticle(articleParams.getSearch());
     }
 }
