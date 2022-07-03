@@ -1,8 +1,8 @@
-package com.hj.blog.Service.serviceImpl;
+package com.hj.blog.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hj.blog.Service.CommentService;
-import com.hj.blog.Service.SysUserService;
+import com.hj.blog.service.CommentService;
+import com.hj.blog.service.SysUserService;
 import com.hj.blog.admin.mapper.CommentMapper;
 import com.hj.blog.admin.pojo.Comment;
 import com.hj.blog.admin.pojo.SysUser;

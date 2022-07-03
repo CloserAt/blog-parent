@@ -1,7 +1,6 @@
-package com.hj.blog.Service;
+package com.hj.blog.service;
 
 
-import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.LoginParams;
 import com.hj.blog.admin.vo.params.RegisterParams;

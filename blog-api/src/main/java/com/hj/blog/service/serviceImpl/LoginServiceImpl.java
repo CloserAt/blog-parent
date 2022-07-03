@@ -1,8 +1,8 @@
-package com.hj.blog.Service.serviceImpl;
+package com.hj.blog.service.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
-import com.hj.blog.Service.LoginService;
-import com.hj.blog.Service.SysUserService;
+import com.hj.blog.service.LoginService;
+import com.hj.blog.service.SysUserService;
 import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.utils.JWTUtils;
 import com.hj.blog.admin.vo.ErrorCode;

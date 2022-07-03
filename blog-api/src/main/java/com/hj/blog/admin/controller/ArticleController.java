@@ -1,9 +1,7 @@
 package com.hj.blog.admin.controller;
 
-import com.hj.blog.Service.ArticleService;
-import com.hj.blog.common.aop.CacheAnnotation;
+import com.hj.blog.service.ArticleService;
 import com.hj.blog.common.aop.LogAnnotation;
-import com.hj.blog.admin.vo.ArticleVo;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.ArticleParams;
 import com.hj.blog.admin.vo.params.PageParams;
@@ -227,5 +225,19 @@ public class ArticleController {
     @PostMapping("publish")
     public Result articlePublish(@RequestBody ArticleParams articleParams) {
         return articleService.articlePublish(articleParams);
+    }
+
+    @PostMapping("{id}")
+    public Result articleById(@PathVariable("id") Long articleId){
+        return articleService.findArticleById(articleId);
+    }
+
+
+    //搜索文章接口
+    @PostMapping("search")
+    public Result search(@RequestBody ArticleParams articleParams){
+        //写一个搜索接口
+        String search = articleParams.getSearch();
+        return articleService.searchArticle(search);
     }
 }

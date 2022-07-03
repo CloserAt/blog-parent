@@ -1,6 +1,6 @@
 package com.hj.blog.admin.controller;
 
-import com.hj.blog.Service.SysUserService;
+import com.hj.blog.service.SysUserService;
 import com.hj.blog.admin.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

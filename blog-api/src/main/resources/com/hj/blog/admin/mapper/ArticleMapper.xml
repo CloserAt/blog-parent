@@ -19,9 +19,7 @@
 
     <!--List<Archives> listArchives();-->
     <select id="listArchives"  resultType="com.hj.blog.admin.dao.dos.Archives">
-        select FROM_UNIXTIME(create_date/1000,'%Y') as year, FROM_UNIXTIME(create_date/1000,'%m') as month,count(*) as count
-        from hj_article
-        group by year,month
+        select year(FROM_UNIXTIME(create_date/1000)) as year,month(FROM_UNIXTIME(create_date/1000)) as month, count(*) count from hj_article group by year,month;
     </select>
     <!--Long categoryId,
     Long tagId,

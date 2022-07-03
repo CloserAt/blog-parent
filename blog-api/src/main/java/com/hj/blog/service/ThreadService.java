@@ -1,4 +1,4 @@
-package com.hj.blog.Service;
+package com.hj.blog.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.hj.blog.admin.mapper.ArticleMapper;

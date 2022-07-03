@@ -1,6 +1,6 @@
 package com.hj.blog.admin.controller;
 
-import com.hj.blog.Service.CommentService;
+import com.hj.blog.service.CommentService;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.CommentParams;
 import org.springframework.beans.factory.annotation.Autowired;

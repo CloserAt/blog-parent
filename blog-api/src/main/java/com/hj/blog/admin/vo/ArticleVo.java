@@ -19,11 +19,13 @@ public class ArticleVo {
     private Integer commentCounts;
     private Integer viewCounts;
     private Integer weight;
-    private String crateDate;
-    private String author = "adia";
+    private String createDate;
+    //private String author;
+    private UserVo author;
 
     private List<TagVo> tags;
 
     private ArticleBodyVo body;
     private CategoryVo category;
+
 }

@@ -1,6 +1,5 @@
-package com.hj.blog.Service;
+package com.hj.blog.service;
 
-import com.hj.blog.admin.vo.ArticleVo;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.ArticleParams;
 import com.hj.blog.admin.vo.params.PageParams;
@@ -19,4 +18,5 @@ public interface ArticleService {
 
     Result articlePublish(ArticleParams articleParams);
 
+    Result searchArticle(String search);
 }

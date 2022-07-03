@@ -1,7 +1,7 @@
-package com.hj.blog.Service.serviceImpl;
+package com.hj.blog.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hj.blog.Service.TagService;
+import com.hj.blog.service.TagService;
 import com.hj.blog.admin.mapper.TagMapper;
 import com.hj.blog.admin.pojo.Tag;
 import com.hj.blog.admin.vo.Result;

@@ -1,6 +1,6 @@
 package com.hj.blog.admin.controller;
 
-import com.hj.blog.Service.LoginService;
+import com.hj.blog.service.LoginService;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.LoginParams;
 import org.springframework.beans.factory.annotation.Autowired;

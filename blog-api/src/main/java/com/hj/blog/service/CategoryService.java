@@ -1,4 +1,4 @@
-package com.hj.blog.Service;
+package com.hj.blog.service;
 
 import com.hj.blog.admin.vo.CategoryVo;
 import com.hj.blog.admin.vo.Result;
