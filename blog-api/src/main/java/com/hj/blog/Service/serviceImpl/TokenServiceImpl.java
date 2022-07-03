@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hj.blog.Service.TokenService;
 import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.utils.JWTUtils;
-import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TokenServiceImpl implements TokenService {
     //校验token
     @Override
     public SysUser checkToken(String token) {
-        if (StringUtil.isNullOrEmpty(token)) {
+        if (StringUtils.isBlank(token)) {
             return null;
         }
         //解析校验
@@ -29,8 +29,8 @@ public class TokenServiceImpl implements TokenService {
             return null;
         }
         //redis中校验
-        String userJson = redisTemplate.opsForValue().get("TOKEN" + token);
-        if (StringUtil.isNullOrEmpty(userJson)) {
+        String userJson = redisTemplate.opsForValue().get("TOKEN_" + token);
+        if (StringUtils.isBlank(userJson)) {
             return null;
         }
 

@@ -9,6 +9,7 @@ import com.hj.blog.admin.vo.TagVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,8 +31,8 @@ public class TagServiceImpl implements TagService {
 
     private List<TagVo> copyList(List<Tag> tags) {
         List<TagVo> tagVoList = new ArrayList<>();
-        for (int i = 0; i < tags.size(); i++) {
-            tagVoList.add(copy(tags.get(i)));
+        for (Tag tag : tags) {
+            tagVoList.add(copy(tag));
         }
         return tagVoList;
     }
@@ -39,6 +40,7 @@ public class TagServiceImpl implements TagService {
     private TagVo copy(Tag tag) {
         TagVo tagVo = new TagVo();
         BeanUtils.copyProperties(tag,tagVo);
+        tagVo.setId(String.valueOf(tag.getId()));
         return tagVo;
     }
 
@@ -51,7 +53,7 @@ public class TagServiceImpl implements TagService {
             查询 根据tag_id 分组计数，从大到小排列取前默认（limit）个
          */
         List<Long> tagIds = tagMapper.findHotTagIds(i);//返回默认数量i下最热的几个标签
-        if (tagIds == null) {
+        if (CollectionUtils.isEmpty(tagIds)) {
             //如果查出的标签id为空，则返回一个空的list集合
             return Result.success(Collections.emptyList());
         }
@@ -65,8 +67,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public Result findAllTags() {
         LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(Tag::getId);
-        queryWrapper.select(Tag::getTagName);
+        queryWrapper.select(Tag::getId,Tag::getTagName);
         List<Tag> tags = this.tagMapper.selectList(queryWrapper);
         return Result.success(copyList(tags));
     }

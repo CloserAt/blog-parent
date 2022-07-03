@@ -39,7 +39,7 @@ public class TagsController {
     @Autowired
     private TagService tagService;
 
-    @GetMapping("/hot")// : /tags/hot
+    @GetMapping("hot")// : /tags/hot
     public Result listHotTags() {
         return tagService.hots(5);//此处5是设置的默认前五个最热标签-linmit
     }

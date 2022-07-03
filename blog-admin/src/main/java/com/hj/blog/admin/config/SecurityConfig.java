@@ -1,6 +1,5 @@
 package com.hj.blog.admin.config;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,14 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    //密码配置，代表spring里的security密码用的策略是BCryptPasswordEncoder
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
     public static void main(String[] args) {
-        //加密策略 MD5 不安全 彩虹表  MD5 加盐
+        //加密策略 MD5 不安全 彩虹表  MD5+盐组合
         String mszlu = new BCryptPasswordEncoder().encode("closer");
         System.out.println(mszlu);
     }
@@ -52,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and()
-                .csrf().disable() //csrf关闭 如果自定义登录 需要关闭:防止跨站请求伪造，默认只能通过post方式提交logout请求
-                .headers().frameOptions().sameOrigin();//支持iframe页面嵌套
+                .csrf().disable() //csrf关闭 如果自定义登录 需要关闭
+                .headers().frameOptions().sameOrigin();// 支持iframe页面嵌套
     }
 }

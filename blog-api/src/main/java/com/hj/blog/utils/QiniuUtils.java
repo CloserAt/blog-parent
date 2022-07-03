@@ -16,9 +16,9 @@ public class QiniuUtils {
 
     public static final String url = "http://re49apw7o.hd-bkt.clouddn.com/";
 
-    @Value("11")
+    @Value("bBAcnR3f6gwI9X4_I_gPbyLBF3N42nIE4OV6udzP")
     private String accessKey;
-    @Value("22")
+    @Value("UgQQuCapA5dWCa-e3o2aJbt6MrSiwp7bhMu34LED")
     private String accessSecretKey;
 
     public  boolean upload(MultipartFile file, String fileName){

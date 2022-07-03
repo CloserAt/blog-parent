@@ -32,13 +32,13 @@
         <where>
             1 = 1
             <if test="categoryId != null">
-                and  category_id = #{categoryId}
-            </if>
-            <if test="year != null and year.length>0 and month != null and month.length>0">
-                and ( FROM_UNIXTIME(create_date/1000,'%Y') = #{year} and FROM_UNIXTIME(create_date/1000,'%m') = #{month} )
+                and  category_id=#{categoryId}
             </if>
             <if test="tagId != null">
-                and id in (select article_id from ms_article_tag where tag_id=#{tagId})
+                and id in (select article_id from hj_article_tag where tag_id=#{tagId})
+            </if>
+            <if test="year != null and year.length>0 and month != null and month.length>0">
+                and ( FROM_UNIXTIME(create_date/1000,'%Y')=#{year} and FROM_UNIXTIME(create_date/1000,'%m')=#{month})
             </if>
         </where>
         order by weight,create_date desc

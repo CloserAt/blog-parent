@@ -16,18 +16,17 @@ public class SecurityUserService implements UserDetailsService {
     @Autowired
     private AdminService adminService;
 
-    //springSecurity提供的loadUserByUsername方法
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //登陆的时候会把username传到这里
-        //我们通过username查询admin表，若存在该username,则把密码告诉springSecurity
+        //登录的时候，会把username 传递到这里
+        //通过username查询 admin表，如果 admin存在 将密码告诉spring security
+        //如果不存在 返回null 认证失败了
         Admin admin = this.adminService.findAdminByUsername(username);
-        if (admin == null) {
-            //登陆失败
+        if (admin == null){
+            //登录失败
             return null;
         }
-        //此处密码验证交给spring Security
-        UserDetails userDetails = new User(username, admin.getPassword(), new ArrayList<>());
-        return null;
+        UserDetails userDetails = new User(username,admin.getPassword(),new ArrayList<>());
+        return userDetails;
     }
 }

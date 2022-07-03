@@ -28,34 +28,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
-    //所有分类接口实现
+    //写文章-所有分类接口实现
     @Override
-    public Result findCategory() {
+    public Result findCategoryAll() {
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
-        List<Category> categories = this.categoryMapper.selectList(queryWrapper);
+        queryWrapper.select(Category::getId,Category::getCategoryName);
+        List<Category> categories = categoryMapper.selectList(queryWrapper);
         return Result.success(copyList(categories));
-    }
-
-    private List<CategoryVo> copyList(List<Category> categories) {
-        List<CategoryVo> categoryVoList = new ArrayList<>();
-        for (Category category : categories) {
-            categoryVoList.add(copy(category));
-        }
-        return categoryVoList;
-    }
-
-    private CategoryVo copy(Category category) {
-        CategoryVo categoryVo = new CategoryVo();
-        BeanUtils.copyProperties(category,categoryVo);
-        return categoryVo;
     }
 
 
     //导航-文章分类接口实现
     @Override
     public Result findAllCategoriesDetail() {
-        List<Category> categories = categoryMapper.selectList(new LambdaQueryWrapper<>());
-        return Result.success(categories);
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        List<Category> categories = categoryMapper.selectList(queryWrapper);
+        return Result.success(copyList(categories));
     }
 
 
@@ -64,5 +52,21 @@ public class CategoryServiceImpl implements CategoryService {
     public Result findCategoriesDetailById(Long id) {
         Category category = categoryMapper.selectById(id);
         return Result.success(copy(category));
+    }
+
+
+    public CategoryVo copy(Category category) {
+        CategoryVo categoryVo = new CategoryVo();
+        BeanUtils.copyProperties(category,categoryVo);
+        categoryVo.setId(String.valueOf(category.getId()));
+        return categoryVo;
+    }
+
+    public List<CategoryVo> copyList(List<Category> categories) {
+        List<CategoryVo> categoryVoList = new ArrayList<>();
+        for (Category category : categories) {
+            categoryVoList.add(copy(category));
+        }
+        return categoryVoList;
     }
 }

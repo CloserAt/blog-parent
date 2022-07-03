@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Result {
-
     private boolean success;
 
     private int code;

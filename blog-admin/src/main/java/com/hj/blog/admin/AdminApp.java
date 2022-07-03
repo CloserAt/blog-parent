@@ -1,4 +1,4 @@
-package com.hj.blog;
+package com.hj.blog.admin;
 
 
 import org.springframework.boot.SpringApplication;

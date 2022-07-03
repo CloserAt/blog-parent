@@ -9,8 +9,7 @@ import com.hj.blog.admin.vo.ErrorCode;
 import com.hj.blog.admin.vo.Result;
 import com.hj.blog.admin.vo.params.LoginParams;
 import com.hj.blog.admin.vo.params.RegisterParams;
-import com.mysql.cj.util.StringUtils;
-import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -38,11 +37,12 @@ public class LoginServiceImpl implements LoginService {
         3.不存在，返回失败
         4.存在，使用jwt生成token返回给前端
         5.token放入redis中，redis存储  token:user信息 设置过期时间（登录认证时先认证token字符串是否合法，再去redis认证是否存在）
+          session会给服务器增加压力
          */
         String account = loginParams.getAccount();
         String password = loginParams.getPassword();
         //如何用户或者密码为空直接返回
-        if (StringUtil.isNullOrEmpty(account) || StringUtil.isNullOrEmpty(password)) {
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
             return Result.fail(ErrorCode.PARAMS_ERROR.getCode(), ErrorCode.PARAMS_ERROR.getMsg());
         }
         password = DigestUtils.md5Hex(password + salt);//密码使用md5+盐的方式来加密，注意此处需要导入md5依赖
@@ -51,14 +51,14 @@ public class LoginServiceImpl implements LoginService {
             return Result.fail(ErrorCode.ACCOUNT_PWD_NOT_EXIST.getCode(), ErrorCode.ACCOUNT_PWD_NOT_EXIST.getMsg());
         }
         String token = JWTUtils.createToken(sysUser.getId());//生成token
-        redisTemplate.opsForValue().set("TOKEN" + token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("TOKEN_" + token, JSON.toJSONString(sysUser),1, TimeUnit.DAYS);
         return Result.success(token);
     }
 
     //用户退出登陆
     @Override
     public Result logOut(String token) {
-        redisTemplate.delete("TOKEN" + token);
+        redisTemplate.delete("TOKEN_" + token);
         return Result.success(null);
     }
 
@@ -78,12 +78,12 @@ public class LoginServiceImpl implements LoginService {
         String password = registerParams.getPassword();
         String nickname = registerParams.getNickname();
         //第一步-判断是否合法
-        if (StringUtils.isNullOrEmpty(account) || StringUtils.isNullOrEmpty(password) || StringUtils.isNullOrEmpty(nickname)) {
+        if (StringUtils.isBlank(account) || StringUtils.isBlank(password) || StringUtils.isBlank(nickname)) {
             return Result.fail(ErrorCode.PARAMS_ERROR.getCode(), ErrorCode.PARAMS_ERROR.getMsg());
         }
 
         //第二步-判断是否存在
-        SysUser sysUser = this.sysUserService.findUserByAccount(account);
+        SysUser sysUser = sysUserService.findUserByAccount(account);
         if (sysUser != null) {
             return Result.fail(ErrorCode.ACCOUNT_PWD_EXIST.getCode(), ErrorCode.ACCOUNT_PWD_EXIST.getMsg());
         }
@@ -100,13 +100,14 @@ public class LoginServiceImpl implements LoginService {
         newSysUser.setEmail("");
         newSysUser.setSalt("");
         newSysUser.setStatus("");
+        newSysUser.setAvatar("/static/img/youke.png");
         this.sysUserService.save(newSysUser);
 
         //第四步-生成token
         String token = JWTUtils.createToken(newSysUser.getId());
 
         //第五步-传入redis
-        redisTemplate.opsForValue().set("TOKEN" + token, JSON.toJSONString(newSysUser),1,TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("TOKEN_" + token, JSON.toJSONString(newSysUser),1,TimeUnit.DAYS);
 
         //第六步-在接口上增加事务注解@Transactional
 

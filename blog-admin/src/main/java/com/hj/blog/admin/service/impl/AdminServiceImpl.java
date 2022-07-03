@@ -12,21 +12,20 @@ import java.util.List;
 
 @Service
 public class AdminServiceImpl implements AdminService {
-
     @Autowired
     private AdminMapper adminMapper;
 
-    public Admin findAdminByUsername(String username) {
+    public Admin findAdminByUsername(String username){
         LambdaQueryWrapper<Admin> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Admin::getUsername,username);
         queryWrapper.last("limit 1");
-        Admin admin = adminMapper.selectOne(queryWrapper);
+        Admin admin =  adminMapper.selectOne(queryWrapper);
         return admin;
     }
 
     @Override
-    public List<Permission> findPermissionByAdminId(Long id) {
-        List<Permission> permissionByAdminId = adminMapper.findPermissionByAdminId(id);
-        return permissionByAdminId;
+    public List<Permission> findPermissionByAdminId(Long adminId) {
+        //SELECT * FROM `ms_permission` where id in (select permission_id from ms_admin_permission where admin_id=1)
+        return adminMapper.findPermissionByAdminId(adminId);
     }
 }

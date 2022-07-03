@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class Permission {
-
     @TableId(type = IdType.AUTO)
     private Long id;
 

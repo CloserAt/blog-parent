@@ -81,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
 //        }
 //
 //        queryWrapper.orderByDesc(Article::getWeight);//按照是否置顶排序
-//        queryWrapper.orderByDesc(Article::getCreateData);//按照创建时间倒叙排列
+//        queryWrapper.orderByDesc(Article::getCreateDate);//按照创建时间倒叙排列
 //
 //        Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);//第一个参数为查询的页，第二个为查询条件
 //        List<Article> records = articlePage.getRecords();
@@ -89,37 +89,40 @@ public class ArticleServiceImpl implements ArticleService {
 //        return Result.success(articleVoList);
 //    }
 
-    private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTags) {
+    private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTag) {
         List<ArticleVo> articleVoList = new ArrayList<>();
-        for (int i = 0; i < records.size(); i++) {
-            articleVoList.add(copy(records.get(i),isAuthor,isTags,true,true));
+        for (Article record : records) {
+            articleVoList.add(copy(record,isAuthor,isTag,false,false));
         }
         return  articleVoList;
     }
     //重载的方式
-    private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTags, boolean isBody, boolean isCategory) {
+    private List<ArticleVo> copyList(List<Article> records, boolean isAuthor, boolean isTag, boolean isBody, boolean isCategory) {
         List<ArticleVo> articleVoList = new ArrayList<>();
-        for (int i = 0; i < records.size(); i++) {
-            articleVoList.add(copy(records.get(i),isAuthor,isTags,isBody,isCategory));
+        for (Article record : records) {
+            articleVoList.add(copy(record,isAuthor,isTag,isBody,isCategory));
         }
-        return  articleVoList;
+        return articleVoList;
     }
 
 
     @Autowired
     private CategoryService categoryService;
 
-    private ArticleVo copy(Article article, boolean isAuthor, boolean isTags, boolean isBody, boolean isCategory) {
+    private ArticleVo copy(Article article, boolean isAuthor, boolean isTag, boolean isBody, boolean isCategory) {
         ArticleVo articleVo = new ArticleVo();
+        articleVo.setId(String.valueOf(article.getId()));//String.valueOf()可以避免空指针异常
         BeanUtils.copyProperties(article,articleVo);//spring提供的copy方法，将article的数据拷贝到articleVo中
+
         //因为article中的createDate是Long型，而articleVo中的是String类型，所以此处需要转一下类型，不然copy不过来
         articleVo.setCrateDate(new DateTime(article.getCreateDate()).toString("yyyy-MM-dd HH:mm"));
+
         //并不是所有接口都需要标签和作者的信息，此处需要两个处理
         if (isAuthor) {
             Long authorId = article.getAuthorId();
             articleVo.setAuthor(sysUserService.findAuthorsByAuthorId(authorId).getNickname());
         }
-        if (isTags) {
+        if (isTag) {
             Long articleId = article.getId();
             articleVo.setTags(tagService.findTagsByArticleId(articleId));
         }
@@ -216,12 +219,11 @@ public class ArticleServiceImpl implements ArticleService {
 
         Article article = new Article();
         article.setTitle(articleParams.getTitle());
-        article.setCategoryId(articleParams.getCategory().getId());
+        article.setCategoryId(Long.parseLong(articleParams.getCategory().getId()));
         article.setSummary(articleParams.getSummary());
         article.setCreateDate(System.currentTimeMillis());
         article.setAuthorId(sysUser.getId());//从作者信息中获取作者id来设置
         article.setWeight(Article.Article_Common);
-        article.setBodyId(-1L);
         article.setViewCounts(0);
         article.setCommentCounts(0);
         this.articleMapper.insert(article);//插入之后会生成一个文章id
@@ -232,24 +234,25 @@ public class ArticleServiceImpl implements ArticleService {
             for (TagVo tag : tags) {
                 Long articleId = article.getId();
                 ArticleTag articleTag = new ArticleTag();
-                articleTag.setTagId(tag.getId());
+                articleTag.setTagId(Long.parseLong(tag.getId()));
                 articleTag.setArticleId(articleId);
                 articleTagMapper.insert(articleTag);
             }
         }
 
-        //body内容存储
+        //body内容往数据库存储
         ArticleBody articleBody = new ArticleBody();
         articleBody.setArticleId(article.getId());
         articleBody.setContent(articleParams.getBody().getContent());
         articleBody.setContentHtml(articleParams.getBody().getContentHtml());
         articleBodyMapper.insert(articleBody);
-        articleBody.setId(articleBody.getId());
 
+        article.setBodyId(articleBody.getId());
         articleMapper.updateById(article);//更新
 
         Map<String,String> map = new HashMap<>();//接口说明中返回的是{"id":12232323}
         map.put("id", article.getId().toString());//此处转为String也是防止精度损失
+
         return Result.success(map);
     }
 }

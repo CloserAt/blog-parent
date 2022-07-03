@@ -8,6 +8,8 @@ import lombok.Data;
 public class Admin {
     @TableId(type = IdType.AUTO)
     private Long id;
+
     private String username;
+
     private String password;
 }

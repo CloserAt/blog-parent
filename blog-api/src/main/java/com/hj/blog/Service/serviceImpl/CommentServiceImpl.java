@@ -83,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
     private CommentVo copy(Comment comment) {
         CommentVo commentVo = new CommentVo();
         BeanUtils.copyProperties(comment,commentVo);
+        commentVo.setId(String.valueOf(comment.getId()));
 
         commentVo.setCreateDate(new DateTime(comment.getCreateDate()).toString("yyyy-MM-dd HH:mm"));
         Long authorId = comment.getAuthorId();
@@ -120,9 +121,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Result comment(CommentParams commentParams) {
         SysUser sysUser = UserThreadLocal.get();//从这里获取登陆的用户信息
+
         Comment comment = new Comment();
         comment.setArticleId(commentParams.getArticleId());
-        comment.setAuthorId(sysUser.getId());
+        comment.setAuthorId(sysUser.getId());//空指针异常
         comment.setContent(commentParams.getContent());
         comment.setCreateDate(System.currentTimeMillis());
         Long parent = commentParams.getParent();
@@ -135,6 +137,8 @@ public class CommentServiceImpl implements CommentService {
         Long toUserId = commentParams.getToUserId();
         comment.setToUid(toUserId == null ? 0 : toUserId);
         this.commentMapper.insert(comment);
-        return Result.success(null);
+
+        CommentVo commentVo = copy(comment);
+        return Result.success(commentVo);
     }
 }

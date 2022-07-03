@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JWTUtils {
-    private static final String jwtToken = "123456Hj!@#$$";//密钥
+    private static final String jwtToken = "123456789Closer!@#$$";//密钥
 
     //生成一个token
     public static String createToken(Long userId){
@@ -34,5 +34,18 @@ public class JWTUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //JDK11版本过高不自带javax.xml.bind的相关包，才导致执行时无法找到具体的类文件
+    /*
+        javax/xml/bind/DatatypeConverter
+        需要导入的依赖详见pom文件
+        注意：依赖建议导入一个后再接着导入下一个
+     */
+    public static void main(String[] args) {
+        String token = JWTUtils.createToken(100L);
+        System.out.println(token);
+        Map<String, Object> map = JWTUtils.checkToken(token);
+        System.out.println(map.get("userId"));
     }
 }

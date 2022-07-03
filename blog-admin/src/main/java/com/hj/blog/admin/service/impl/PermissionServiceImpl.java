@@ -20,12 +20,13 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Result listPermission(PageParams pageParams) {
-        Integer currentPage = pageParams.getCurrentPage();
-        Integer pageSize = pageParams.getPageSize();
-        Page<Permission> page = new Page<>(currentPage, pageSize);
-
+        /*
+        要的数据是管理后台的 表的所有字段 Permission
+        分页查询
+         */
+        Page<Permission> page = new Page<>(pageParams.getCurrentPage(), pageParams.getPageSize());
         LambdaQueryWrapper<Permission> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(pageParams.getQueryString())) {
+        if (StringUtils.isNotBlank(pageParams.getQueryString())){
             queryWrapper.eq(Permission::getName,pageParams.getQueryString());
         }
         Page<Permission> permissionPage = permissionMapper.selectPage(page, queryWrapper);
@@ -35,25 +36,16 @@ public class PermissionServiceImpl implements PermissionService {
         return Result.success(pageResult);
     }
 
-
-    //create接口实现
-    @Override
     public Result add(Permission permission) {
         this.permissionMapper.insert(permission);
         return Result.success(null);
     }
 
-
-    //update接口实现
-    @Override
     public Result update(Permission permission) {
         this.permissionMapper.updateById(permission);
         return Result.success(null);
     }
 
-
-    //delete接口实现
-    @Override
     public Result delete(Long id) {
         this.permissionMapper.deleteById(id);
         return Result.success(null);

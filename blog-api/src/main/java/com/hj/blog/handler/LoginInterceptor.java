@@ -1,25 +1,30 @@
 package com.hj.blog.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.hj.blog.Service.LoginService;
 import com.hj.blog.Service.TokenService;
 import com.hj.blog.admin.pojo.SysUser;
 import com.hj.blog.utils.UserThreadLocal;
 import com.hj.blog.admin.vo.ErrorCode;
 import com.hj.blog.admin.vo.Result;
-import com.mysql.cj.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Slf4j
 @Component
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private LoginService loginService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         4.如果认证成功，放行即可
          */
         //判断请求接口路径
-        if (!(handler instanceof HandlerInterceptor)) {
+        if (!(handler instanceof HandlerMethod)) {
             return true;//handler可能是 RequestResourceHandler springboot程序 访问静态资源 默认去classpath下的static目录查询
         }
         String token = request.getHeader("Authorization");
@@ -44,7 +49,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         log.info("=================request end===========================");
 
         //判断token是否为空
-        if (StringUtils.isNullOrEmpty(token)) {
+        if (StringUtils.isBlank(token)) {
             Result fail = Result.fail(ErrorCode.NO_LOGIN.getCode(), ErrorCode.NO_LOGIN.getMsg());
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().print(JSON.toJSONString(fail));

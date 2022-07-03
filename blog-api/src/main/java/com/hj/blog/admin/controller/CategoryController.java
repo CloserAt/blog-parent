@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("categorys")
 public class CategoryController {
 
     //所有分类接口
@@ -47,7 +47,7 @@ public class CategoryController {
 
     @GetMapping
     public Result categoryAll() {
-        return categoryService.findCategory();
+        return categoryService.findCategoryAll();
     }
 
 
@@ -108,7 +108,7 @@ public class CategoryController {
 
     ~~~
      */
-    @GetMapping("/detail")
+    @GetMapping("detail")
     public Result findAllCategoriesDetail() {
         return categoryService.findAllCategoriesDetail();
     }
@@ -144,7 +144,7 @@ public class CategoryController {
             }
     }
      */
-    @GetMapping("/detail/{id}")
+    @GetMapping("detail/{id}")
     public Result findCategoriesDetailById(@PathVariable("id") Long id) {
         return categoryService.findCategoriesDetailById(id);
     }

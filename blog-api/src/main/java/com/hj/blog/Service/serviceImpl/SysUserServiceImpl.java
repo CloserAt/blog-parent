@@ -69,7 +69,7 @@ public class SysUserServiceImpl implements SysUserService {
 
         //设置属性并返回
         LoginUserVo loginUserVo = new LoginUserVo();
-        loginUserVo.setId(sysUser.getId());
+        loginUserVo.setId(String.valueOf(sysUser.getId()));
         loginUserVo.setAccount(sysUser.getAccount());
         loginUserVo.setAvatar(sysUser.getAvatar());
         loginUserVo.setNickname(sysUser.getNickname());
@@ -81,7 +81,7 @@ public class SysUserServiceImpl implements SysUserService {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUser::getAccount,account);//判断要注册的account是否存在
         queryWrapper.last("limit 1");//防止无限查询,加快效率
-        return sysUserMapper.selectOne(queryWrapper);
+        return this.sysUserMapper.selectOne(queryWrapper);
     }
 
     @Override
@@ -101,6 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(sysUser,userVo);
+        userVo.setId(String.valueOf(sysUser.getId()));
         return userVo;
     }
 }

@@ -69,7 +69,7 @@ public class CommentController {
         ]
     }
      */
-    @PostMapping("/article/{id}")
+    @GetMapping("article/{id}")
     public Result comments(@PathVariable("id") Long articleId) {
         return commentService.findCommentsByArticleId(articleId);
     }
@@ -99,7 +99,7 @@ public class CommentController {
         "data": null
     }
      */
-    @PostMapping("/create/change")
+    @PostMapping("create/change")
     public Result comment(@RequestBody CommentParams commentParams) {
         return commentService.comment(commentParams);
     }
